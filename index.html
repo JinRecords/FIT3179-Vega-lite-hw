@@ -4,6 +4,7 @@
   <!-- Include Vega and Vega-Lite libraries -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 </head>
 <body>
@@ -33,54 +34,15 @@
               "feature": "countries"
             }
           },
+          "transform": [
+            {
+              "filter": "datum.properties.NAME == 'Malaysia'"
+            }
+          ],
           "mark": {
             "type": "geoshape",
             "fill": "lightgray",
             "stroke": "white"
-          }
-        },
-        {
-          // Layer for the rainfall data
-          "data": {
-            "url": "/FIT3183-Vega-lite-hw/MalaysiaFloodDataset_MalaysiaFloodDataset.csv"
-          },
-          "transform": [
-            {
-              // Join the rainfall data with the map data
-              "lookup": "STATE",
-              "from": {
-                "data": {
-                  "url": "/FIT3183-Vega-lite-hw/countries.json",
-                  "format": {
-                    "type": "topojson",
-                    "feature": "countries"
-                  }
-                },
-                "key": "properties.NAME"
-              },
-              "as": "geo"
-            },
-            {
-              // Filter out data that doesn't have a corresponding map shape
-              "filter": "datum.geo"
-            }
-          ],
-          "mark": {
-            "type": "geoshape"
-          },
-          "encoding": {
-            // Color encoding for the rainfall data
-            "color": {
-              "field": "ANNUAL RAINFALL",
-              "type": "quantitative",
-              "scale": {"scheme": "blues"},
-              "legend": {"title": "Annual Rainfall (mm)"}
-            },
-            // Tooltip encoding to show data on hover
-            "tooltip": [
-              {"field": "STATE", "type": "nominal", "title": "State"},
-              {"field": "ANNUAL RAINFALL", "type": "quantitative", "title": "Annual Rainfall (mm)"}
-            ]
           }
         }
       ]
