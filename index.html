@@ -11,85 +11,6 @@
     Source: <a href="https://www.kaggle.com/datasets/rajatjurel/malaysia-flood-dataset2000-2010/data">https://www.kaggle.com/datasets/rajatjurel/malaysia-flood-dataset2000-2010/data</a>
   </div>
   <script type="text/javascript">
-    const spec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Annual Rainfall in Malaysia (2010)",
-      "width": 800,
-      "height": 500,
-      "projection": {"type": "mercator"},
-      "layer": [
-        {
-          "data": {
-            "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
-            "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
-          },
-          "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
-        },
-        {
-          "data": {
-            "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
-            "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
-          },
-          "transform": [
-            {
-              "lookup": "properties.name",
-              "from": {
-                "data": {"values": []}, 
-                "key": "state_name",
-                "fields": ["annual_rainfall", "flood"]
-              }
-            },
-            {"filter": "datum.annual_rainfall !== null"}
-          ],
-          "mark": {"type": "geoshape", "stroke": "white"},
-          "encoding": {
-            "color": {
-              "field": "annual_rainfall",
-              "type": "quantitative",
-              "scale": {"scheme": "blues", "reverse": true},
-              "legend": {"title": "Annual Rainfall (mm)"}
-            },
-            "tooltip": [
-              {"field": "properties.name", "type": "nominal", "title": "State"},
-              {
-                "field": "annual_rainfall",
-                "type": "quantitative",
-                "title": "Annual Rainfall (mm)",
-                "format": ".2f"
-              },
-              {"field": "flood", "type": "nominal", "title": "Flood"}
-            ]
-          }
-        },
-        {
-          "data": {
-            "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
-            "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
-          },
-          "transform": [
-            {
-              "lookup": "properties.name",
-              "from": {
-                "data": {"values": []}, 
-                "key": "state_name",
-                "fields": ["annual_rainfall"]
-              }
-            },
-            {"filter": "datum.annual_rainfall === null"},
-            {"calculate": "'No data'", "as": "no_data_tooltip"}
-          ],
-          "mark": {"type": "geoshape", "fill": "transparent"},
-          "encoding": {
-            "tooltip": [
-              {"field": "properties.name", "type": "nominal", "title": "State"},
-              {"field": "no_data_tooltip", "type": "nominal", "title": "Annual Rainfall"},
-              {"field": "no_data_tooltip", "type": "nominal", "title": "Flood"}
-            ]
-          }
-        }
-      ]
-    };
-
     const stateNameMapping = {
         "101": "Johor",
         "102": "Kedah",
@@ -116,8 +37,84 @@
                 };
             }).filter(d => d.state_name);
 
-            spec.layer[1].transform[0].from.data = {values: data};
-            spec.layer[2].transform[0].from.data = {values: data};
+            const spec = {
+              "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+              "title": "Annual Rainfall in Malaysia (2010)",
+              "width": 800,
+              "height": 500,
+              "projection": {"type": "mercator"},
+              "layer": [
+                {
+                  "data": {
+                    "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
+                    "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
+                  },
+                  "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"}
+                },
+                {
+                  "data": {
+                    "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
+                    "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
+                  },
+                  "transform": [
+                    {
+                      "lookup": "properties.name",
+                      "from": {
+                        "data": {"values": data},
+                        "key": "state_name",
+                        "fields": ["annual_rainfall", "flood"]
+                      }
+                    },
+                    {"filter": "datum.annual_rainfall !== null"}
+                  ],
+                  "mark": {"type": "geoshape", "stroke": "white"},
+                  "encoding": {
+                    "color": {
+                      "field": "annual_rainfall",
+                      "type": "quantitative",
+                      "scale": {"scheme": "blues", "reverse": true},
+                      "legend": {"title": "Annual Rainfall (mm)"}
+                    },
+                    "tooltip": [
+                      {"field": "properties.name", "type": "nominal", "title": "State"},
+                      {
+                        "field": "annual_rainfall",
+                        "type": "quantitative",
+                        "title": "Annual Rainfall (mm)",
+                        "format": ".2f"
+                      },
+                      {"field": "flood", "type": "nominal", "title": "Flood"}
+                    ]
+                  }
+                },
+                {
+                  "data": {
+                    "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_10m_admin_1_states_provinces.json",
+                    "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
+                  },
+                  "transform": [
+                    {
+                      "lookup": "properties.name",
+                      "from": {
+                        "data": {"values": data},
+                        "key": "state_name",
+                        "fields": ["annual_rainfall"]
+                      }
+                    },
+                    {"filter": "datum.annual_rainfall === null"},
+                    {"calculate": "'No data'", "as": "no_data_tooltip"}
+                  ],
+                  "mark": {"type": "geoshape", "fill": "transparent"},
+                  "encoding": {
+                    "tooltip": [
+                      {"field": "properties.name", "type": "nominal", "title": "State"},
+                      {"field": "no_data_tooltip", "type": "nominal", "title": "Annual Rainfall"},
+                      {"field": "no_data_tooltip", "type": "nominal", "title": "Flood"}
+                    ]
+                  }
+                }
+              ]
+            };
 
             vegaEmbed("#vis", spec);
         });
