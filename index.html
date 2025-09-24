@@ -27,7 +27,7 @@
         {
           // Base layer for the world map
           "data": {
-            "url": "countries.json", // Using the local TopoJSON file
+            "url": "/FIT3183-Vega-lite-hw/countries.json", // Using the local TopoJSON file
             "format": {
               "type": "topojson",
               "feature": "countries"
@@ -42,7 +42,7 @@
         {
           // Layer for the rainfall data
           "data": {
-            "url": "./MalaysiaFloodDataset_MalaysiaFloodDataset.csv"
+            "url": "/FIT3183-Vega-lite-hw/MalaysiaFloodDataset_MalaysiaFloodDataset.csv"
           },
           "transform": [
             {
@@ -50,7 +50,7 @@
               "lookup": "STATE",
               "from": {
                 "data": {
-                  "url": "countries.json",
+                  "url": "/FIT3183-Vega-lite-hw/countries.json",
                   "format": {
                     "type": "topojson",
                     "feature": "countries"
