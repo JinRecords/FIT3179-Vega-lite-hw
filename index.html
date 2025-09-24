@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include Vega and Vega-Lite libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+</head>
+<body>
+  <!-- This div is the container for the visualization -->
+  <div id="vis"></div>
+
+  <script>
+    // Vega-Lite specification for the map
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "A Decade of Rainfall: Analyzing Malaysian Flood Patterns (2000-2010)",
+      "width": 800,
+      "height": 600,
+      // Projection settings for the map
+      "projection": {
+        "type": "mercator",
+        "center": [109.5112144, 3.8554958]
+      },
+      // Layers of the map
+      "layer": [
+        {
+          // Base layer for the world map
+          "data": {
+            "url": "countries.json", // Using the local TopoJSON file
+            "format": {
+              "type": "topojson",
+              "feature": "countries"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            "fill": "lightgray",
+            "stroke": "white"
+          }
+        },
+        {
+          // Layer for the rainfall data
+          "data": {
+            "url": "./MalaysiaFloodDataset_MalaysiaFloodDataset.csv"
+          },
+          "transform": [
+            {
+              // Join the rainfall data with the map data
+              "lookup": "STATE",
+              "from": {
+                "data": {
+                  "url": "countries.json",
+                  "format": {
+                    "type": "topojson",
+                    "feature": "countries"
+                  }
+                },
+                "key": "properties.NAME"
+              },
+              "as": "geo"
+            },
+            {
+              // Filter out data that doesn't have a corresponding map shape
+              "filter": "datum.geo"
+            }
+          ],
+          "mark": {
+            "type": "geoshape"
+          },
+          "encoding": {
+            // Color encoding for the rainfall data
+            "color": {
+              "field": "ANNUAL RAINFALL",
+              "type": "quantitative",
+              "scale": {"scheme": "blues"},
+              "legend": {"title": "Annual Rainfall (mm)"}
+            },
+            // Tooltip encoding to show data on hover
+            "tooltip": [
+              {"field": "STATE", "type": "nominal", "title": "State"},
+              {"field": "ANNUAL RAINFALL", "type": "quantitative", "title": "Annual Rainfall (mm)"}
+            ]
+          }
+        }
+      ]
+    };
+
+    // Embed the visualization in the 'vis' div
+    vegaEmbed('#vis', spec);
+  </script>
+</body>
+</html>
