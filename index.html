@@ -63,13 +63,6 @@
                 "center": [109, 4.5]
               },
               "layer": [
-                {
-                  "data": {
-		    "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_110m_graticules_1.json",
-		    "format": {"type": "topojson", "feature": "ne_110m_graticules_10"}
-		  },
-		    "mark": {"type": "geoshape", "fill": "none", "stroke": "lightgray"}
-		  },
 		  {
 		  "data": {
                     "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/countries-10m.json",
@@ -153,7 +146,14 @@
                       {"field": "no_data_tooltip", "type": "nominal", "title": "Flood"}
                     ]
                   }
-                }
+                },
+                {
+                  "data": {
+		    "url": "https://jinrecords.github.io/FIT3179-Vega-lite-hw/ne_110m_graticules_1.json",
+		    "format": {"type": "topojson", "feature": "ne_110m_graticules_1"}
+		  },
+		    "mark": {"type": "geoshape", "fill": "none", "stroke": "#E0E0E0", "strokeOpacity": 0.5}
+		  }
               ]
             };
 
